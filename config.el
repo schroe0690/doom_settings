@@ -82,3 +82,7 @@
 ;; SLIME を使用してcommon-lispnの補完
 (setq inferior-lisp-program "ros run") ;; Roswell経由でデフォルトのLisp処理系を起動
 
+;; 終了時の確認をスキップ
+(setq confirm-kill-emacs nil)
+
+
