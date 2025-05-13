@@ -78,6 +78,9 @@
 
 ;; テーマの設定
 (setq doom-theme 'doom-one)
+;; テーマのダウンロード
+;;(package! rebecca-theme)
+;;https://github.com/vic/rebecca-theme/tree/1fe3662d1b02caea96e9a780252b2c45f7a49b1d
 
 ;; SLIME を使用してcommon-lispnの補完
 (setq inferior-lisp-program "ros run") ;; Roswell経由でデフォルトのLisp処理系を起動
