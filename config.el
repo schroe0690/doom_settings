@@ -77,7 +77,7 @@
 
 
 ;; テーマの設定
-(setq doom-theme 'doom-one)
+(setq doom-theme 'rebecca)
 ;; テーマのダウンロード
 ;;(package! rebecca-theme)
 ;;https://github.com/vic/rebecca-theme/tree/1fe3662d1b02caea96e9a780252b2c45f7a49b1d

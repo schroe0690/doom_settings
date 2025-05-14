@@ -47,3 +47,8 @@
 ;; (unpin! pinned-package another-pinned-package)
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;; (unpin! t)
+
+
+
+;; テーマを追加
+(package! rebecca-theme :recipe (:host github :repo "vic/rebecca-theme"))
