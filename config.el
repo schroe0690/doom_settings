@@ -77,6 +77,7 @@
 
 
 ;; テーマの設定
+(put 'customize-themes 'disabled nil)
 (setq doom-theme 'rebecca)
 
 ;; SLIME を使用してcommon-lispnの補完

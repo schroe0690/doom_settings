@@ -52,3 +52,6 @@
 
 ;; テーマを追加
 (package! rebecca-theme :recipe (:host github :repo "vic/rebecca-theme"))
+
+;; gitからクローンできないパッケージをインストール
+(package! dash)
