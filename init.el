@@ -194,5 +194,3 @@
        ;;literate
        (default +bindings +smartparens))
 
-;; 
-(setq inferior-lisp-program "ros -Q run")

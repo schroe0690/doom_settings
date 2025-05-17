@@ -80,10 +80,27 @@
 (put 'customize-themes 'disabled nil)
 (setq doom-theme 'rebecca)
 
-;; SLIME を使用してcommon-lispnの補完
-(setq inferior-lisp-program "ros run") ;; Roswell経由でデフォルトのLisp処理系を起動
-
 ;; 終了時の確認をスキップ
 (setq confirm-kill-emacs nil)
+
+
+;; common-lispnの補完
+(setq inferior-lisp-program "ros run")
+
+;; パッケージを含めたコード保管の設定
+(after! sly
+  (setq sly-contribs '(sly-fancy sly-asdf sly-quicklisp))
+  (setq sly-auto-configure-asdf t)
+  (setq sly-eval-in-emacs t)
+
+  (defun my-sly-setup-for-project ()
+    "Configure Sly for the current project: load quicklisp-slime-helper and add local project path."
+    ;; Quicklispのヘルパーをロード
+    (sly-eval "(cl:when (cl:find-package :quicklisp) (ql:quickload :quicklisp-slime-helper))")
+    ;; ローカルプロジェクトのパスをASDFに登録
+    (sly-eval "(pushnew (cl:pathname \"/root/workspace/my-project/\") asdf:*central-registry* :test #'cl:equal)"))
+
+  ;; 既存のフックがあれば一旦クリアしてから追加する方が安全な場合もあるが、今回はそのまま追加
+  (add-hook 'sly-connected-hook #'my-sly-setup-for-project 'append))
 
 
