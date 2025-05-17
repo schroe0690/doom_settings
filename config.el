@@ -97,8 +97,9 @@
     "Configure Sly for the current project: load quicklisp-slime-helper and add local project path."
     ;; Quicklispのヘルパーをロード
     (sly-eval "(cl:when (cl:find-package :quicklisp) (ql:quickload :quicklisp-slime-helper))")
-    ;; ローカルプロジェクトのパスをASDFに登録
-    (sly-eval "(pushnew (cl:pathname \"/root/workspace/my-project/\") asdf:*central-registry* :test #'cl:equal)"))
+    ;; カレントプロジェクトのパスをASDFに登録
+    (let ((project-root (replace-regexp-in-string "/$" "" default-directory)))
+      (sly-eval `(pushnew (cl:pathname ,project-root) asdf:*central-registry* :test #'cl:equal))))
 
   ;; 既存のフックがあれば一旦クリアしてから追加する方が安全な場合もあるが、今回はそのまま追加
   (add-hook 'sly-connected-hook #'my-sly-setup-for-project 'append))
