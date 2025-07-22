@@ -76,6 +76,11 @@
 ;; they are implemented.
 
 
+
+;; ----追記した設定----
+;; ファイラーの幅を指定
+(setq treemacs-width 27) ;; 例: Treemacs の幅を30文字分に設定
+
 ;; テーマの設定
 (put 'customize-themes 'disabled nil)
 (setq doom-theme 'rebecca)
@@ -105,3 +110,15 @@
   (add-hook 'sly-connected-hook #'my-sly-setup-for-project 'append))
 
 
+;; ----キーバインド----
+;; ファイラーの幅調整
+(with-eval-after-load 'treemacs
+  ;; Treemacs のキーマップを設定
+  (define-key treemacs-mode-map (kbd "C-l") 'treemacs-increase-width)
+  (define-key treemacs-mode-map (kbd "C-h") 'treemacs-decrease-width)
+
+  ;; もしTreemacsをグローバルに操作したい場合（Treemacsバッファがアクティブでなくても）
+  ;; (map! :leader
+  ;;       :desc "Treemacs increase width" "T I" #'treemacs-increase-width
+  ;;       :desc "Treemacs decrease width" "T D" #'treemacs-decrease-width)
+  )
