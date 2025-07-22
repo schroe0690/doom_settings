@@ -88,26 +88,27 @@
 ;; 終了時の確認をスキップ
 (setq confirm-kill-emacs nil)
 
+;; Common Lisp の LSP (lisp-language-server) 設定
+(use-package! lsp-mode
+  :hook (common-lisp-mode . lsp)
+  :config
+  ;; lisp-language-server の実行パスを設定
+  ;; DockerfileでRoswellが/root/.roswell/binにインストールされていることを前提
+  (setq lsp-lisp-language-server-path (expand-file-name "~/.roswell/bin/lisp-language-server")))
 
-;; common-lispnの補完
-(setq inferior-lisp-program "ros run")
+;; SLIME の設定 (任意ですが、LSPと併用することが多いです)
+(use-package! slime
+  :init
+  (setq slime-lisp-implementations
+        '((sbcl ("sbcl")))) ;; SBCLを使うように設定
+  :config
+  (add-to-list 'auto-mode-alist '("\\.lisp\\'" . common-lisp-mode))
+  ;; SLIME が Roswell 経由で SBCL を起動するように設定
+  (setq inferior-lisp-program "~/.roswell/bin/ros --sbs-path sbcl-bin run --"))
 
-;; パッケージを含めたコード保管の設定
-(after! sly
-  (setq sly-contribs '(sly-fancy sly-asdf sly-quicklisp))
-  (setq sly-auto-configure-asdf t)
-  (setq sly-eval-in-emacs t)
-
-  (defun my-sly-setup-for-project ()
-    "Configure Sly for the current project: load quicklisp-slime-helper and add local project path."
-    ;; Quicklispのヘルパーをロード
-    (sly-eval "(cl:when (cl:find-package :quicklisp) (ql:quickload :quicklisp-slime-helper))")
-    ;; カレントプロジェクトのパスをASDFに登録
-    (let ((project-root (replace-regexp-in-string "/$" "" default-directory)))
-      (sly-eval `(pushnew (cl:pathname ,project-root) asdf:*central-registry* :test #'cl:equal))))
-
-  ;; 既存のフックがあれば一旦クリアしてから追加する方が安全な場合もあるが、今回はそのまま追加
-  (add-hook 'sly-connected-hook #'my-sly-setup-for-project 'append))
+;; LSP の自動起動を有効にする (Common Lisp ファイルを開いたときにLSPが起動するように)
+(with-eval-after-load 'lsp-mode
+  (add-hook 'common-lisp-mode-hook #'lsp))
 
 
 ;; ----キーバインド----
