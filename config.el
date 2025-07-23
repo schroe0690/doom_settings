@@ -88,28 +88,15 @@
 ;; 終了時の確認をスキップ
 (setq confirm-kill-emacs nil)
 
-;; Common Lisp の LSP (lisp-language-server) 設定
-(use-package! lsp-mode
-  :hook (common-lisp-mode . lsp)
-  :config
-  ;; lisp-language-server の実行パスを設定
-  ;; DockerfileでRoswellが/root/.roswell/binにインストールされていることを前提
-  (setq lsp-lisp-language-server-path (expand-file-name "~/.roswell/bin/lisp-language-server")))
-
-;; SLIME の設定 (任意ですが、LSPと併用することが多いです)
-(use-package! slime
-  :init
-  (setq slime-lisp-implementations
-        '((sbcl ("sbcl")))) ;; SBCLを使うように設定
-  :config
-  (add-to-list 'auto-mode-alist '("\\.lisp\\'" . common-lisp-mode))
-  ;; SLIME が Roswell 経由で SBCL を起動するように設定
-  (setq inferior-lisp-program "~/.roswell/bin/ros --sbs-path sbcl-bin run --"))
-
-;; LSP の自動起動を有効にする (Common Lisp ファイルを開いたときにLSPが起動するように)
-(with-eval-after-load 'lsp-mode
-  (add-hook 'common-lisp-mode-hook #'lsp))
-
+;; slyがroswell(sbcl)を参照するように設定
+(after! common-lisp
+  (setq inferior-lisp-program "/root/.roswell/bin/ros")
+  (add-to-list 'sly-lisp-implementations
+               '(ros "/root/.roswell/bin/ros"
+                     :init ("sbcl" "--script" "/root/.roswell/bin/ros" "run" "--sbcl" "--load" "%s" "--eval" "%s" "--")))
+  (setq sly-debug-buffer "*sly-debug-log*") ;; この行
+  (setq sly-log-events t) ;; この行
+  )
 
 ;; ----キーバインド----
 ;; ファイラーの幅調整
